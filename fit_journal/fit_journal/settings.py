@@ -12,13 +12,22 @@ DEBUG = env.bool('DEBUG', default=True)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default='localhost')
 
 INSTALLED_APPS = [
+    # local app
+    'auth_service.apps.AuthServiceConfig',
+
+    # default django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # third-party-apps
     'drf_spectacular',
+
+    # local app
+    'journal.apps.JournalConfig',
 ]
 
 MIDDLEWARE = [
