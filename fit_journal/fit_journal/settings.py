@@ -40,6 +40,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTH_USER_MODEL = 'auth_service.Athlete'
 ROOT_URLCONF = 'fit_journal.urls'
 
 TEMPLATES = [
