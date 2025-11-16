@@ -6,7 +6,7 @@ services:
     command: poetry run python3 manage.py runserver 0.0.0.0:8050
     container_name: fit_journal_backend
     volumes:
-      - ./:/home/django/fit_journal/fit_journal
+      - ./fit_journal:/home/django/fit_journal
     ports:
       - "8050:8050"
     depends_on:
