@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from auth_service.utils.mixins import AutoDateMixin
+from utils.mixins import AutoDateMixin
 
 
 class Athlete(AbstractUser, AutoDateMixin):
