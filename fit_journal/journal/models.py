@@ -69,7 +69,7 @@ class ExerciseSet(AutoDateMixin):
     )
     repetition = models.PositiveSmallIntegerField(verbose_name='Число повторений')
     weight = models.PositiveSmallIntegerField(verbose_name='Вес')
-    comment = models.CharField(verbose_name='Комментарий', max_length=200)
+    comment = models.CharField(verbose_name='Комментарий', max_length=200, blank=True, default='')
 
     class Meta:
         verbose_name = 'Подход'
@@ -78,3 +78,14 @@ class ExerciseSet(AutoDateMixin):
     def __str__(self):
         """Строковое представление объекта модели"""
         return f'{self.exercise.name}: {self.repetition} / {self.weight}'
+
+    def save(self, *args, **kwargs):
+        """Расширение метода сохранения"""
+        if self.exercise not in self.training.exercises.all():
+            self.training.exercises.add(self.exercise)
+        super().save(*args, **kwargs)
+
+    def delete(self, **kwargs):
+        """Расширение метода удаления"""
+        self.training.exercises.remove(self.exercise)
+        super().delete(**kwargs)
