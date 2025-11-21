@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 from transliterate import translit
 
@@ -9,7 +11,12 @@ class Exercise(AutoDateMixin):
     """Справочник упражнений"""
 
     name = models.CharField(verbose_name='Название', max_length=200)
-    translit = models.SlugField(verbose_name='Транслит', max_length=200, blank=True, default='')
+    translit = models.SlugField(
+        verbose_name='Транслит',
+        max_length=200,
+        unique=True,
+        help_text='Заполняется автоматически на основе названия',
+    )
 
     class Meta:
         verbose_name = 'Упражнение'
@@ -22,7 +29,9 @@ class Exercise(AutoDateMixin):
 
     def save(self, *args, **kwargs):
         """Перегрузить метод сохранения"""
-        self.slug = translit(self.name)
+        raw_translit = translit(self.name, 'ru', reversed=True)
+        raw_translit = re.sub(r'\s', '_', raw_translit)
+        self.translit = re.sub(r'[^a-z0-9_]', '', raw_translit)
         super().save(*args, **kwargs)
 
 
