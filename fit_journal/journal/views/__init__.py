@@ -1,7 +1,5 @@
-from .private import ExerciseChangeView
-from .public import ExerciseList
+from .public import ExerciseViewSet
 
 __all__ = [
-    'ExerciseChangeView',
-    'ExerciseList',
+    'ExerciseViewSet',
 ]

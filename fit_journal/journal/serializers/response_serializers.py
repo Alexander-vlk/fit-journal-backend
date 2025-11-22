@@ -8,7 +8,7 @@ from journal.models import Exercise
     many=True,
     examples=[
         OpenApiExample(
-            'Пример ответа',
+            'Получение списка упражнений из справочника',
             value=[
                 {
                     'id': 1,
@@ -21,6 +21,14 @@ from journal.models import Exercise
                     'translit': 'zhim_rnolda',
                 },
             ],
+        ),
+        OpenApiExample(
+            'Получение одного упражнения из справочника',
+            value={
+                'id': 1,
+                'name': 'Выпады',
+                'translit': 'vypady',
+            },
         ),
     ],
 )

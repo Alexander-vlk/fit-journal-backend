@@ -1,8 +1,11 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import SimpleRouter
 
-from journal.views import ExerciseList, ExerciseChangeView
+from journal.views import ExerciseViewSet
+
+journal_router = SimpleRouter()
+journal_router.register('exercises', ExerciseViewSet)
 
 urlpatterns = [
-    path('journal/exercise/list', ExerciseList.as_view(), name='exercise_list'),
-    path('journal/exercise/create/', ExerciseChangeView.as_view(), name='create_exercise'),
+    path('', include(journal_router.urls)),
 ]
