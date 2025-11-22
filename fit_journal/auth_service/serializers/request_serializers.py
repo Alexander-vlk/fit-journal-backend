@@ -59,6 +59,37 @@ class ChangePasswordRequestSerializer(serializers.Serializer):
                 'last_name': 'last_name',
                 'first_name': 'first_name',
                 'second_name': 'second_name',
+                'phone': 'phone'
+            },
+        ),
+    ],
+)
+class AthleteRequestSerializer(serializers.ModelSerializer):
+    """Сериализатор модели Athlete"""
+
+    class Meta:
+        model = Athlete
+        fields = [
+            'username',
+            'email',
+            'last_name',
+            'first_name',
+            'second_name',
+            'phone',
+        ]
+
+
+@extend_schema_serializer(
+    many=False,
+    examples=[
+        OpenApiExample(
+            'Стандартный запрос',
+            value={
+                'username': 'username',
+                'email': 'email',
+                'last_name': 'last_name',
+                'first_name': 'first_name',
+                'second_name': 'second_name',
                 'phone': 'phone',
                 'password': 'password',
                 'password2': 'password2',
