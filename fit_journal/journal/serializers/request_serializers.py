@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema_serializer, OpenApiExample
 from rest_framework import serializers
 
-from journal.models import Exercise
+from journal.models import Exercise, ExerciseSet
 
 
 @extend_schema_serializer(
@@ -52,3 +52,32 @@ class TrainingRequestSerializer(serializers.Serializer):
         help_text='Дата проведения тренировки',
         format='%Y-%m-%d',
     )
+
+
+@extend_schema_serializer(
+    many=True,
+    examples=[
+        OpenApiExample(
+            'Стандартный запрос',
+            value={
+                'exercise_id': 1,
+                'training_id': 1,
+                'repetition': 12,
+                'weight': 12,
+                'comment': '',
+            },
+        ),
+    ],
+)
+class ExerciseSetRequestSerializer(serializers.ModelSerializer):
+    """Сериализатор подхода"""
+
+    class Meta:
+        model = ExerciseSet
+        fields = [
+            'exercise_id',
+            'training_id',
+            'repetition',
+            'weight',
+            'comment',
+        ]
