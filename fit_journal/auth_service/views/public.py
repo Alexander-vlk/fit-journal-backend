@@ -32,7 +32,7 @@ class HealthCheck(APIView):
     @staticmethod
     def get(request):
         """GET-запрос"""
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_202_ACCEPTED)
 
 
 @extend_schema_view(
