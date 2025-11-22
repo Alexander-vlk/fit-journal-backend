@@ -17,6 +17,7 @@ class Exercise(AutoDateMixin):
         unique=True,
         help_text='Заполняется автоматически на основе названия',
     )
+    available_for_user = models.BooleanField(verbose_name='Доступно для выбора пользователю', default=False)
 
     class Meta:
         verbose_name = 'Упражнение'
