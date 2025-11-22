@@ -31,10 +31,9 @@ class ExerciseRequestSerializer(serializers.ModelSerializer):
         OpenApiExample(
             'Стандартный формат запроса',
             value={
-                'athlete_id': 123,
                 'exercises_translit': [
                     'vypady',
-                    'prised_so_shtangoy',
+                    'prised_so_shtangoj',
                 ],
                 'date': '2025-10-10',
             },
@@ -44,7 +43,6 @@ class ExerciseRequestSerializer(serializers.ModelSerializer):
 class TrainingRequestSerializer(serializers.Serializer):
     """Сериализатор запроса для модели Training"""
 
-    athlete_id = serializers.IntegerField(help_text='ID спортсмена', min_value=1)
     exercises_translit = serializers.ListField(
         help_text='Список транслитов упражнений в тренировке',
         child=serializers.SlugField(),
