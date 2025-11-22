@@ -1,10 +1,12 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from auth_service.permissions import HasNoRefreshToken
+from auth_service.permissions import HasNoRefreshToken, HasRefreshToken
 from auth_service.serializers import AccessTokenResponseSerializer
 from auth_service.services import get_authenticated_response
 from utils.constants import APISchemaTags, DefaultAPIResponses
@@ -60,3 +62,41 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
         response = get_authenticated_response(request, access_token, refresh_token)
         return response
+
+
+@extend_schema_view(
+    post=extend_schema(
+        tags=[APISchemaTags.AUTH_SERVICE],
+        summary='Обновить access токен с использованием refresh токена',
+        operation_id='Обновить access токен с использованием refresh токена',
+        request={},
+        responses={
+            **DefaultAPIResponses.RESPONSES,
+            status.HTTP_200_OK: AccessTokenResponseSerializer,
+        },
+    ),
+)
+class CustomTokenRefreshView(TokenRefreshView):
+    """Обновить access токен с использованием refresh токена"""
+
+    permission_classes: list = [HasRefreshToken]
+    authentication_classes: list = []
+
+    serializer_class = TokenRefreshSerializer
+
+    def post(self, request: Request, *args, **kwargs) -> Response:
+        """POST-запрос"""
+        refresh_token = request.COOKIES.get('refresh_token')
+        request_serializer = self.serializer_class(
+           data={
+                'refresh': refresh_token,
+            },
+        )
+        request_serializer.is_valid(raise_exception=True)
+
+        response_serializer = AccessTokenResponseSerializer(
+            {
+                'access_token': request_serializer.validated_data['access'],
+            },
+        )
+        return Response(response_serializer.data, status=status.HTTP_200_OK)
