@@ -104,6 +104,23 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'jit journal API reference',
+    'SERVE_INCLUDE_SCHEMA': True,
+    'SECURITY': [
+        {
+            'BearerAuth': [],
+        },
+    ],
+    'SECURITY_DEFINITIONS': {
+        'BearerAuth': {
+            'type': 'http',
+            'scheme': 'bearer',
+            'bearerformat': 'JWT',
+        },
+    },
+}
+
 SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
