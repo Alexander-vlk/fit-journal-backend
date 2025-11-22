@@ -59,7 +59,7 @@ class RegisterAthlete(APIView):
         request_serializer = RegisterAthleteRequestSerializer(data=request.data)
         request_serializer.is_valid(raise_exception=True)
 
-        new_athlete = Athlete.objects.create_user(
+        Athlete.objects.create_user(
             username=request_serializer.validated_data['username'],
             password=request_serializer.validated_data['password'],
             email=request_serializer.validated_data['email'],

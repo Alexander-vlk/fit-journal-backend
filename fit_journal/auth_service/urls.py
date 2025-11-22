@@ -1,7 +1,13 @@
 from django.urls import path
 
-from auth_service.views import HealthCheck, CustomTokenObtainPairView, CustomTokenRefreshView, ChangePassword, \
-    RegisterAthlete
+from auth_service.views import (
+    HealthCheck,
+    CustomTokenObtainPairView,
+    CustomTokenRefreshView,
+    ChangePassword,
+    RegisterAthlete,
+    LogOut,
+)
 
 urlpatterns = [
     path('healthcheck/', HealthCheck.as_view(), name='health_check'),
@@ -9,4 +15,5 @@ urlpatterns = [
     path('athlete/register/', RegisterAthlete.as_view(), name='athlete_register'),
     path('token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('password/change/', ChangePassword.as_view(), name='password_change'),
+    path('logout/', LogOut.as_view(), name='log_out'),
 ]

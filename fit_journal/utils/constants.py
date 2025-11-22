@@ -1,4 +1,4 @@
-from drf_spectacular.utils import OpenApiResponse, OpenApiExample
+from drf_spectacular.utils import OpenApiResponse
 from rest_framework import status
 
 
