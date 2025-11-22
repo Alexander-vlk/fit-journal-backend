@@ -1,7 +1,8 @@
 from django.urls import path
 
-from auth_service.views import HealthCheck
+from auth_service.views import HealthCheck, CustomTokenObtainPairView
 
 urlpatterns = [
     path('healthcheck/', HealthCheck.as_view(), name='health_check'),
+    path('token/obtain/', CustomTokenObtainPairView.as_view(), name='token_obtain'),
 ]

@@ -1,5 +1,6 @@
-from .public import HealthCheck
+from .public import HealthCheck, CustomTokenObtainPairView
 
 __all__ = [
+    'CustomTokenObtainPairView',
     'HealthCheck',
 ]
