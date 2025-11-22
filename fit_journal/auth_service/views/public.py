@@ -18,6 +18,7 @@ class HealthCheck(APIView):
     authentication_classes: list = []
     permission_classes: list = []
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         """GET-запрос"""
         return Response(status=status.HTTP_200_OK)
