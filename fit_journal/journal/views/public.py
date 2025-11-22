@@ -25,7 +25,6 @@ from utils.constants import DefaultAPIResponses, APISchemaTags
             status.HTTP_200_OK: ExerciseResponseSerializer,
         },
     ),
-
 )
 class ExerciseViewSet(generics.ListAPIView, generics.RetrieveAPIView, viewsets.GenericViewSet):
     """Получить данные из справочника упражнений"""
