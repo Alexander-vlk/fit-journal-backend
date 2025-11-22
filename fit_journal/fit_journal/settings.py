@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     # third-party-apps
     'drf_spectacular',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 
     # local app
     'journal.apps.JournalConfig',
