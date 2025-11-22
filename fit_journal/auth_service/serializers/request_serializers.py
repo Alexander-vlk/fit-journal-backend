@@ -1,6 +1,9 @@
+from cfgv import ValidationError
 from django.contrib.auth.password_validation import validate_password as django_validate_password
 from drf_spectacular.utils import extend_schema_serializer, OpenApiExample
 from rest_framework import serializers
+
+from auth_service.models import Athlete
 
 
 @extend_schema_serializer(
@@ -51,10 +54,17 @@ class ChangePasswordRequestSerializer(serializers.Serializer):
         OpenApiExample(
             'Стандартный запрос',
             value={
-                '': '',
-            }
-        )
-    ]
+                'username': 'username',
+                'email': 'email',
+                'last_name': 'last_name',
+                'first_name': 'first_name',
+                'second_name': 'second_name',
+                'phone': 'phone',
+                'password': 'password',
+                'password2': 'password2',
+            },
+        ),
+    ],
 )
 class RegisterAthleteRequestSerializer(serializers.Serializer):
     """Сериализатор запроса модели Athlete"""
@@ -69,9 +79,16 @@ class RegisterAthleteRequestSerializer(serializers.Serializer):
     password = serializers.CharField(help_text='Пароль', max_length=128)
     password2 = serializers.CharField(help_text='Пароль (еще раз)', max_length=128)
 
+    def validate_username(self, username):
+        """Проверить имя пользователя"""
+        if Athlete.objects.filter(username=username).exists():
+            raise ValidationError('Пользователь с таким именем уже существует')
+
+        return username
+
     def validate_password(self, password):
         """Проверить пароль"""
-        django_validate_password(password, user=self.context['user'])
+        django_validate_password(password)
         return password
 
     def validate(self, obj):
