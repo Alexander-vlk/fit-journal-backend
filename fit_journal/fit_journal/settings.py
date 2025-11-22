@@ -106,7 +106,7 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'jit journal API reference',
+    'TITLE': 'fit journal API reference',
     'SERVE_INCLUDE_SCHEMA': True,
     'SECURITY': [
         {
