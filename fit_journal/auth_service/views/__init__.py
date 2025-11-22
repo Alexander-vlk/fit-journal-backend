@@ -1,7 +1,8 @@
-from .private import ChangePassword, LogOut
+from .private import ChangePassword, LogOut, AthleteChange
 from .public import HealthCheck, CustomTokenObtainPairView, CustomTokenRefreshView, RegisterAthlete
 
 __all__ = [
+    'AthleteChange',
     'ChangePassword',
     'CustomTokenRefreshView',
     'CustomTokenObtainPairView',

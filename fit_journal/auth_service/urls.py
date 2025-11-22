@@ -7,12 +7,14 @@ from auth_service.views import (
     ChangePassword,
     RegisterAthlete,
     LogOut,
+    AthleteChange,
 )
 
 urlpatterns = [
     path('healthcheck/', HealthCheck.as_view(), name='health_check'),
     path('token/obtain/', CustomTokenObtainPairView.as_view(), name='token_obtain'),
     path('athlete/register/', RegisterAthlete.as_view(), name='athlete_register'),
+    path('athlete/', AthleteChange.as_view(), name='athlete_change'),
     path('token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('password/change/', ChangePassword.as_view(), name='password_change'),
     path('logout/', LogOut.as_view(), name='log_out'),

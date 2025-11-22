@@ -7,7 +7,8 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from auth_service.serializers import ChangePasswordRequestSerializer
+from auth_service.permissions import HasRefreshToken
+from auth_service.serializers import ChangePasswordRequestSerializer, AthleteRequestSerializer
 from utils.constants import APISchemaTags, DefaultAPIResponses
 
 
@@ -59,7 +60,7 @@ class ChangePassword(APIView):
 class LogOut(APIView):
     """Выйти из профиля"""
 
-    permission_classes: list = [IsAuthenticated]
+    permission_classes: list = [IsAuthenticated, HasRefreshToken]
     authentication_classes: list = [JWTAuthentication]
 
     def post(self, request, *args, **kwargs):
@@ -74,8 +75,29 @@ class LogOut(APIView):
         return response
 
 
+@extend_schema_view(
+    patch=extend_schema(
+        tags=[APISchemaTags.AUTH_SERVICE],
+        summary='Поменять данные профиля спортсмена',
+        operation_id='Поменять данные профиля спортсмена',
+        request=AthleteRequestSerializer,
+        responses={
+            **DefaultAPIResponses.RESPONSES,
+            status.HTTP_200_OK: {},
+        },
+    ),
+)
 class AthleteChange(APIView):
-    """
-    Поменять данные профиля спортсмена
-    todo: Доделать
-    """
+    """Поменять данные профиля спортсмена"""
+
+    def patch(self, request, *args, **kwargs):
+        """PATCH-запрос"""
+        request_serializer = AthleteRequestSerializer(
+            request.user,
+            data=request.data,
+            partial=True,
+        )
+        request_serializer.is_valid(raise_exception=True)
+        request_serializer.save()
+
+        return Response(status=status.HTTP_200_OK)
