@@ -72,3 +72,10 @@ class LogOut(APIView):
         response = Response(status=status.HTTP_205_RESET_CONTENT)
         response.delete_cookie('refresh_token')
         return response
+
+
+class AthleteChange(APIView):
+    """
+    Поменять данные профиля спортсмена
+    todo: Доделать
+    """
