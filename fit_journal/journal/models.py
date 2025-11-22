@@ -29,7 +29,8 @@ class Exercise(AutoDateMixin):
 
     def save(self, *args, **kwargs):
         """Перегрузить метод сохранения"""
-        raw_translit = translit(self.name, 'ru', reversed=True)
+        raw_translit = self.name.lower()
+        raw_translit = translit(raw_translit, 'ru', reversed=True)
         raw_translit = re.sub(r'\s', '_', raw_translit)
         self.translit = re.sub(r'[^a-z0-9_]', '', raw_translit)
         super().save(*args, **kwargs)
