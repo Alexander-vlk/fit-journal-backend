@@ -38,6 +38,27 @@ class HealthCheck(APIView):
 @extend_schema_view(
     post=extend_schema(
         tags=[APISchemaTags.AUTH_SERVICE],
+        summary='Регистрация спортсмена',
+        operation_id='Регистрация спортсмена',
+        responses={
+            **DefaultAPIResponses.RESPONSES,
+            status.HTTP_202_ACCEPTED: {},
+        },
+    ),
+)
+class RegisterAthlete(APIView):
+    """Регистрация спортсмена"""
+
+    permission_classes: list = [HasNoRefreshToken]
+    authentication_classes: list = []
+
+    def post(self, request, *args, **kwargs):
+        """POST-запрос"""
+
+
+@extend_schema_view(
+    post=extend_schema(
+        tags=[APISchemaTags.AUTH_SERVICE],
         summary='Получить пару access и refresh токенов',
         operation_id='Получение пары токенов',
         responses={
