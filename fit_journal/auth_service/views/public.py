@@ -14,7 +14,10 @@ from utils.constants import APISchemaTags, DefaultAPIResponses
     tags=[APISchemaTags.AUTH_SERVICE],
     summary='Проверка доступности сервиса',
     operation_id='Проверка доступности сервиса',
-    responses=DefaultAPIResponses.RESPONSES,
+    responses={
+        status.HTTP_200_OK: {},
+        **DefaultAPIResponses.RESPONSES,
+    },
 )
 class HealthCheck(APIView):
     """Проверка доступности сервиса"""
