@@ -2,10 +2,10 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from auth_service.permissions import HasNoRefreshToken
+from auth_service.serializers import AccessTokenResponseSerializer
 from auth_service.services import get_authenticated_response
 from utils.constants import APISchemaTags, DefaultAPIResponses
 
@@ -34,7 +34,7 @@ class HealthCheck(APIView):
     operation_id='Получение пары токенов',
     responses={
         **DefaultAPIResponses.RESPONSES,
-        status.HTTP_200_OK: TokenObtainPairSerializer,
+        status.HTTP_200_OK: AccessTokenResponseSerializer,
     },
 )
 class CustomTokenObtainPairView(TokenObtainPairView):
