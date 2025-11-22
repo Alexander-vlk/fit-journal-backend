@@ -1,14 +1,13 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status
 
-from journal.constants import JOURNAL
 from journal.models import Exercise
 from journal.serializers import ExerciseRequestSerializer
-from utils.constants import DefaultAPIResponses
+from utils.constants import DefaultAPIResponses, APISchemaTags
 
 
 @extend_schema(
-    tags=[JOURNAL],
+    tags=[APISchemaTags.JOURNAL],
     summary='Работа с записями в справочнике упражнений',
     operation_id='Изменить/удалить/создать запись в справочнике упражнений',
     responses={
