@@ -3,14 +3,13 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from journal.constants import JOURNAL
 from journal.models import Exercise
 from journal.serializers import ExerciseResponseSerializer
-from utils.constants import DefaultAPIResponses
+from utils.constants import DefaultAPIResponses, APISchemaTags
 
 
 @extend_schema(
-    tags=[JOURNAL],
+    tags=[APISchemaTags.JOURNAL],
     summary='Получить данные из справочника упражнений',
     operation_id='Получить данные из справочника упражнений',
     responses={
