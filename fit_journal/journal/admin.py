@@ -7,7 +7,7 @@ from journal.models import Exercise, ExerciseSet, Training
 class ExerciseAdmin(admin.ModelAdmin):
     """Админ для Exercise"""
 
-    list_display = ['name', 'translit']
+    list_display = ['name', 'translit', 'available_for_user']
     readonly_fields = ['translit']
 
 
