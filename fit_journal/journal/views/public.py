@@ -11,16 +11,21 @@ from utils.constants import DefaultAPIResponses, APISchemaTags
         tags=[APISchemaTags.JOURNAL],
         summary='Получить запись из справочника тренировок',
         operation_id='Получить запись из справочника тренировок',
+        responses={
+            **DefaultAPIResponses.RESPONSES,
+            status.HTTP_200_OK: ExerciseResponseSerializer,
+        },
     ),
     list=extend_schema(
         tags=[APISchemaTags.JOURNAL],
         summary='Получить список записей из справочника тренировок',
         operation_id='Получить список записей из справочника тренировок',
+        responses={
+            **DefaultAPIResponses.RESPONSES,
+            status.HTTP_200_OK: ExerciseResponseSerializer,
+        },
     ),
-    responses={
-        **DefaultAPIResponses.RESPONSES,
-        status.HTTP_200_OK: ExerciseResponseSerializer,
-    },
+
 )
 class ExerciseViewSet(generics.ListAPIView, generics.RetrieveAPIView, viewsets.GenericViewSet):
     """Получить данные из справочника упражнений"""

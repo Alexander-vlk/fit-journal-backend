@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,15 +10,17 @@ from journal.serializers import TrainingRequestSerializer, TrainingResponseSeria
 from utils.constants import DefaultAPIResponses, APISchemaTags
 
 
-@extend_schema(
-    tags=[APISchemaTags.JOURNAL],
-    summary='Создать тренировку',
-    operation_id='Создать тренировку',
-    request=TrainingRequestSerializer,
-    responses={
-        **DefaultAPIResponses.RESPONSES,
-        status.HTTP_201_CREATED: TrainingResponseSerializer,
-    },
+@extend_schema_view(
+    post=extend_schema(
+        tags=[APISchemaTags.JOURNAL],
+        summary='Создать тренировку',
+        operation_id='Создать тренировку',
+        request=TrainingRequestSerializer,
+        responses={
+            **DefaultAPIResponses.RESPONSES,
+            status.HTTP_201_CREATED: TrainingResponseSerializer,
+        },
+    ),
 )
 class TrainingCreate(APIView):
     """Создать тренировку"""

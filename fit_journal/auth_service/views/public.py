@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -10,14 +10,16 @@ from auth_service.services import get_authenticated_response
 from utils.constants import APISchemaTags, DefaultAPIResponses
 
 
-@extend_schema(
-    tags=[APISchemaTags.AUTH_SERVICE],
-    summary='Проверка доступности сервиса',
-    operation_id='Проверка доступности сервиса',
-    responses={
-        status.HTTP_200_OK: {},
-        **DefaultAPIResponses.RESPONSES,
-    },
+@extend_schema_view(
+    get=extend_schema(
+        tags=[APISchemaTags.AUTH_SERVICE],
+        summary='Проверка доступности сервиса',
+        operation_id='Проверка доступности сервиса',
+        responses={
+            status.HTTP_200_OK: {},
+            **DefaultAPIResponses.RESPONSES,
+        },
+    ),
 )
 class HealthCheck(APIView):
     """Проверка доступности сервиса"""
@@ -31,14 +33,16 @@ class HealthCheck(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-@extend_schema(
-    tags=[APISchemaTags.AUTH_SERVICE],
-    summary='Получить пару access и refresh токенов',
-    operation_id='Получение пары токенов',
-    responses={
-        **DefaultAPIResponses.RESPONSES,
-        status.HTTP_200_OK: AccessTokenResponseSerializer,
-    },
+@extend_schema_view(
+    post=extend_schema(
+        tags=[APISchemaTags.AUTH_SERVICE],
+        summary='Получить пару access и refresh токенов',
+        operation_id='Получение пары токенов',
+        responses={
+            **DefaultAPIResponses.RESPONSES,
+            status.HTTP_200_OK: AccessTokenResponseSerializer,
+        },
+    ),
 )
 class CustomTokenObtainPairView(TokenObtainPairView):
     """Получить пару access и refresh токенов"""
