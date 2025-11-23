@@ -47,7 +47,7 @@ class Training(AutoDateMixin):
     class Meta:
         verbose_name = 'Тренировка'
         verbose_name_plural = 'Тренировки'
-        ordering = ['date']
+        ordering = ['-date']
 
     def __str__(self):
         """Строковое представление объекта модели"""
