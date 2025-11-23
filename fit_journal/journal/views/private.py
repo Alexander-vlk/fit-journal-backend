@@ -10,7 +10,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from auth_service.permissions import HasRefreshToken
 from journal.models import Training, Exercise, ExerciseSet
 from journal.serializers import TrainingRequestSerializer, TrainingResponseSerializer, ExerciseSetRequestSerializer, \
-    ExerciseSetResponseSerializer
+    ExerciseSetResponseSerializer, ExerciseSetIdRequestSerializer
 from utils.constants import DefaultAPIResponses, APISchemaTags
 
 
@@ -102,6 +102,26 @@ class ExerciseSetViewSet(viewsets.ViewSet):
 
     def partial_update(self, request, *args, **kwargs):
         """Обновить подход"""
+        exercise_set = get_object_or_404(ExerciseSet, id=kwargs['pk'])
+        request_serializer = ExerciseSetRequestSerializer(
+            exercise_set,
+            data=request.data,
+            context={
+                'user': request.user,
+            },
+            partial=True,
+        )
+        request_serializer.is_valid(raise_exception=True)
+        request_serializer.save()
+        return Response(status=status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):
         """Удалить подход"""
+        request_serializer = ExerciseSetIdRequestSerializer(
+            data={
+                'id': kwargs['pk'],
+            },
+        )
+        request_serializer.is_valid(raise_exception=True)
+        get_object_or_404(ExerciseSet, id=request_serializer.validated_data['id']).delete()
+        return Response(status=status.HTTP_200_OK)
