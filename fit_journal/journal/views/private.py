@@ -61,8 +61,8 @@ class TrainingCreate(APIView):
     ),
     partial_update=extend_schema(
         tags=[APISchemaTags.JOURNAL],
-        summary='Удалить подход',
-        operation_id='Удалить подход',
+        summary='Обновить подход',
+        operation_id='Обновить подход',
         request=ExerciseSetRequestSerializer,
         responses={
             **DefaultAPIResponses.RESPONSES,
