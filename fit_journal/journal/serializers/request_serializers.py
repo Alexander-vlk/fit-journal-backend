@@ -55,6 +55,30 @@ class TrainingRequestSerializer(serializers.Serializer):
 
 
 @extend_schema_serializer(
+    many=False,
+    examples=[
+        OpenApiExample(
+            'Стандартный запрос',
+            value={
+                'id': 1,
+            },
+        ),
+    ],
+)
+class ExerciseSetIdRequestSerializer(serializers.Serializer):
+    """Сериализатор для ID подхода"""
+
+    id = serializers.IntegerField(help_text='ID подхода', min_value=1)
+
+    def validate_exercise_set_id(self, exercise_set_id):
+        """Проверить, что удаляется подход, привязанный к тренировке пользователя"""
+        if ExerciseSet.objects.select_related('training').get(id=exercise_set_id).training.user != self.context['user']:
+            raise serializers.ValidationError('Нельзя удалить подход, привязанный к чужой тренировке')
+
+        return exercise_set_id
+
+
+@extend_schema_serializer(
     many=True,
     examples=[
         OpenApiExample(
