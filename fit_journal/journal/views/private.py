@@ -1,6 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status, viewsets, generics, mixins
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -54,6 +55,7 @@ class TrainingCreate(APIView):
         tags=[APISchemaTags.JOURNAL],
         summary='Создать подход',
         operation_id='Создать подход',
+        request=ExerciseSetRequestSerializer,
         responses={
             **DefaultAPIResponses.RESPONSES,
             status.HTTP_201_CREATED: {},
@@ -88,6 +90,15 @@ class ExerciseSetViewSet(viewsets.ViewSet):
 
     def create(self, request, *args, **kwargs):
         """Создать подход"""
+        request_serializer = ExerciseSetRequestSerializer(
+            data=request.data,
+            context={
+                'user': request.user,
+            },
+        )
+        request_serializer.is_valid(raise_exception=True)
+        request_serializer.save()
+        return Response(status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, *args, **kwargs):
         """Обновить подход"""

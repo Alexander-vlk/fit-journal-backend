@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema_serializer, OpenApiExample
 from rest_framework import serializers
 
-from journal.models import Exercise, ExerciseSet
+from journal.models import Exercise, ExerciseSet, Training
 
 
 @extend_schema_serializer(
@@ -60,8 +60,8 @@ class TrainingRequestSerializer(serializers.Serializer):
         OpenApiExample(
             'Стандартный запрос',
             value={
-                'exercise_id': 1,
-                'training_id': 1,
+                'training': 1,
+                'exercise': 1,
                 'repetition': 12,
                 'weight': 12,
                 'comment': '',
@@ -75,9 +75,16 @@ class ExerciseSetRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExerciseSet
         fields = [
-            'exercise_id',
-            'training_id',
+            'exercise',
+            'training',
             'repetition',
             'weight',
             'comment',
         ]
+
+    def validate_training_id(self, training: int) -> int:
+        """Проверить, что тренировка принадлежит пользователю, отправившему запрос"""
+        if training not in Training.objects.filter(user=self.context['user']).values_list('id', flat=True):
+            raise serializers.ValidationError('Нельзя создать тренировку другому пользователю')
+
+        return training
