@@ -4,9 +4,15 @@ from .request_serializers import (
     ExerciseSetRequestSerializer,
     ExerciseSetIdRequestSerializer,
 )
-from .response_serializers import ExerciseResponseSerializer, TrainingResponseSerializer, ExerciseSetResponseSerializer
+from .response_serializers import (
+    ExerciseResponseSerializer,
+    TrainingResponseSerializer,
+    ExerciseSetResponseSerializer,
+    ColorResponseSerializer,
+)
 
 __all__ = [
+    'ColorResponseSerializer',
     'ExerciseRequestSerializer',
     'ExerciseResponseSerializer',
     'ExerciseSetRequestSerializer',

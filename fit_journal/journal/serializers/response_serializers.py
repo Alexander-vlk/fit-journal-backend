@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema_serializer, OpenApiExample
 from rest_framework import serializers
 
-from journal.models import Exercise, Training, ExerciseSet
+from journal.models import Exercise, Training, ExerciseSet, Color
 
 
 @extend_schema_serializer(
@@ -113,3 +113,39 @@ class ExerciseSetResponseSerializer(serializers.ModelSerializer):
             'comment',
         ]
 
+
+@extend_schema_serializer(
+    many=True,
+    examples=[
+        OpenApiExample(
+            'Стандартный ответ',
+            value=[
+                {
+                    'id': 1,
+                    'background_color': 'bg-blue-200',
+                    'text_color': 'text-blue-700',
+                },
+                {
+                    'id': 2,
+                    'background_color': 'bg-red-200',
+                    'text_color': 'text-red-700',
+                },
+                {
+                    'id': 3,
+                    'background_color': 'bg-green-200',
+                    'text_color': 'text-green-700',
+                },
+            ],
+        ),
+    ],
+)
+class ColorResponseSerializer(serializers.ModelSerializer):
+    """Сериализатор ответа для Color"""
+
+    class Meta:
+        model = Color
+        fields = [
+            'id',
+            'background_color',
+            'text_color',
+        ]
