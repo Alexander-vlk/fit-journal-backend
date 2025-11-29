@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema_serializer, OpenApiExample
 from rest_framework import serializers
 
-from journal.models import Exercise, Training, ExerciseSet, Color
+from journal.models import Exercise, Training, ExerciseSet, Color, AthleteTrainingTypeColor
 
 
 @extend_schema_serializer(
@@ -149,3 +149,34 @@ class ColorResponseSerializer(serializers.ModelSerializer):
             'background_color',
             'text_color',
         ]
+
+
+@extend_schema_serializer(
+    many=True,
+    examples=[
+        OpenApiExample(
+            'Стандартный ответ',
+            value=[
+                {
+                    'id': 1,
+                    'background_color': 'bg-blue-200',
+                    'text_color': 'text-blue-700',
+                    'training_type': 'Фулбади',
+                },
+                {
+                    'id': 2,
+                    'background_color': 'bg-red-200',
+                    'text_color': 'text-red-700',
+                    'training_type': 'Грудь-трицепс',
+                },
+            ],
+        ),
+    ],
+)
+class AthleteTrainingTypeColorResponseSerializer(serializers.Serializer):
+    """Сериализатор ответа для AthleteTrainingTypeColor"""
+
+    id = serializers.IntegerField(help_text='ID записи', min_length=1)
+    background_color = serializers.CharField(help_text='Цвет фона', max_length=30)
+    text_color = serializers.CharField(help_text='Цвет текста', max_length=30)
+    training_type = serializers.CharField(help_text='Тип тренировки', max_length=40)

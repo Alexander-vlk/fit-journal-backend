@@ -9,9 +9,11 @@ from .response_serializers import (
     TrainingResponseSerializer,
     ExerciseSetResponseSerializer,
     ColorResponseSerializer,
+    AthleteTrainingTypeColorResponseSerializer,
 )
 
 __all__ = [
+    'AthleteTrainingTypeColorResponseSerializer',
     'ColorResponseSerializer',
     'ExerciseRequestSerializer',
     'ExerciseResponseSerializer',
