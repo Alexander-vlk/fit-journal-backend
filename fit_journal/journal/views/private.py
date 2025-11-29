@@ -8,9 +8,9 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from auth_service.permissions import HasRefreshToken
-from journal.models import Training, Exercise, ExerciseSet
+from journal.models import Training, Exercise, ExerciseSet, AthleteTrainingTypeColor
 from journal.serializers import TrainingRequestSerializer, TrainingResponseSerializer, ExerciseSetRequestSerializer, \
-    ExerciseSetResponseSerializer, ExerciseSetIdRequestSerializer
+    ExerciseSetResponseSerializer, ExerciseSetIdRequestSerializer, AthleteTrainingTypeColorResponseSerializer
 from utils.constants import DefaultAPIResponses, APISchemaTags
 
 
@@ -66,6 +66,18 @@ class AthleteTrainingTypeColorViewSet(viewsets.ViewSet):
     @staticmethod
     def list(request):
         """Получить список связей AthleteTrainingTypeColor для конкретного пользователя"""
+        relations = (
+            AthleteTrainingTypeColor.objects.filter(athlete=request.user)
+            .select_related('color', 'training_type')
+            .values(
+                'id',
+                'color__background_color',
+                'color__text_color',
+                'training_type__name',
+            )
+        )
+        response_serializer = AthleteTrainingTypeColorResponseSerializer(instance=relations, many=True)
+        return Response(response_serializer.data, status=status.HTTP_200_OK)
 
     @staticmethod
     def retrieve(request, pk):
