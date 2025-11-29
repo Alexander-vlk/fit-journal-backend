@@ -51,6 +51,40 @@ class TrainingCreate(APIView):
 
 
 @extend_schema_view(
+    list=extend_schema(),
+    retrieve=extend_schema(),
+    create=extend_schema(),
+    partial_update=extend_schema(),
+    destroy=extend_schema(),
+)
+class AthleteTrainingTypeColorViewSet(viewsets.ViewSet):
+    """CRUD для AthleteTrainingTypeColor"""
+
+    permission_classes: list = [IsAuthenticated]
+    authentication_classes: list = [JWTAuthentication]
+
+    @staticmethod
+    def list(request):
+        """Получить список связей AthleteTrainingTypeColor для конкретного пользователя"""
+
+    @staticmethod
+    def retrieve(request, pk):
+        """Получить связь AthleteTrainingTypeColor для конкретного пользователя"""
+
+    @staticmethod
+    def create(request):
+        """Создать связь AthleteTrainingTypeColor"""
+
+    @staticmethod
+    def partial_update(request, pk):
+        """Частично обновить связь AthleteTrainingTypeColor"""
+
+    @staticmethod
+    def destroy(request, pk):
+        """Удалить связь AthleteTrainingTypeColor"""
+
+
+@extend_schema_view(
     create=extend_schema(
         tags=[APISchemaTags.JOURNAL],
         summary='Создать подход',
@@ -88,7 +122,8 @@ class ExerciseSetViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated, HasRefreshToken]
     authentication_classes = [JWTAuthentication]
 
-    def create(self, request, *args, **kwargs):
+    @staticmethod
+    def create(request, *args, **kwargs):
         """Создать подход"""
         request_serializer = ExerciseSetRequestSerializer(
             data=request.data,
@@ -100,7 +135,8 @@ class ExerciseSetViewSet(viewsets.ViewSet):
         request_serializer.save()
         return Response(status=status.HTTP_201_CREATED)
 
-    def partial_update(self, request, *args, **kwargs):
+    @staticmethod
+    def partial_update(request, *args, **kwargs):
         """Обновить подход"""
         exercise_set = get_object_or_404(ExerciseSet, id=kwargs['pk'])
         request_serializer = ExerciseSetRequestSerializer(
@@ -115,7 +151,8 @@ class ExerciseSetViewSet(viewsets.ViewSet):
         request_serializer.save()
         return Response(status=status.HTTP_200_OK)
 
-    def destroy(self, request, *args, **kwargs):
+    @staticmethod
+    def destroy(request, *args, **kwargs):
         """Удалить подход"""
         request_serializer = ExerciseSetIdRequestSerializer(
             data={
