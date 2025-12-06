@@ -1,11 +1,17 @@
 from django.urls import path, include
 from rest_framework.routers import SimpleRouter
 
-from journal.views import ExerciseViewSet, TrainingCreate, ExerciseSetViewSet, GetColorsList
+from journal.views import ExerciseViewSet, TrainingCreate, ExerciseSetViewSet, GetColorsList, \
+    AthleteTrainingTypeColorViewSet
 
 journal_router = SimpleRouter()
 journal_router.register('exercises', ExerciseViewSet)
 journal_router.register('exercise_sets', ExerciseSetViewSet, basename='exercise_set')
+journal_router.register(
+    'athlete_trainingtypes_colors',
+    AthleteTrainingTypeColorViewSet,
+    basename='athlete_trainingtypes_colors',
+)
 
 urlpatterns = [
     path('', include(journal_router.urls)),

@@ -63,11 +63,31 @@ class TrainingCreate(APIView):
 
 
 @extend_schema_view(
-    list=extend_schema(),
-    retrieve=extend_schema(),
-    create=extend_schema(),
-    partial_update=extend_schema(),
-    destroy=extend_schema(),
+    list=extend_schema(
+        tags=[APISchemaTags.JOURNAL],
+        summary='Получить список связей Атлет - Тип тренировки - Цвет',
+        operation_id='Получить список связей Атлет - Тип тренировки - Цвет',
+    ),
+    retrieve=extend_schema(
+        tags=[APISchemaTags.JOURNAL],
+        summary='Получить связь Атлет - Тип тренировки - Цвет',
+        operation_id='Получить связь Атлет - Тип тренировки - Цвет',
+    ),
+    create=extend_schema(
+        tags=[APISchemaTags.JOURNAL],
+        summary='Создать связь Атлет - Тип тренировки - Цвет',
+        operation_id='Создать связь Атлет - Тип тренировки - Цвет',
+    ),
+    update=extend_schema(
+        tags=[APISchemaTags.JOURNAL],
+        summary='Обновить связь Атлет - Тип тренировки - Цвет',
+        operation_id='Обновить связь Атлет - Тип тренировки - Цвет',
+    ),
+    destroy=extend_schema(
+        tags=[APISchemaTags.JOURNAL],
+        summary='Удалить связь Атлет - Тип тренировки - Цвет',
+        operation_id='Удалить связь Атлет - Тип тренировки - Цвет',
+    ),
 )
 class AthleteTrainingTypeColorViewSet(viewsets.ViewSet):
     """CRUD для AthleteTrainingTypeColor"""
@@ -81,12 +101,6 @@ class AthleteTrainingTypeColorViewSet(viewsets.ViewSet):
         relations = (
             AthleteTrainingTypeColor.objects.filter(athlete=request.user)
             .select_related('color', 'training_type')
-            .values(
-                'id',
-                'color__background_color',
-                'color__text_color',
-                'training_type__name',
-            )
         )
         response_serializer = AthleteTrainingTypeColorResponseSerializer(instance=relations, many=True)
         return Response(response_serializer.data, status=status.HTTP_200_OK)
@@ -94,13 +108,23 @@ class AthleteTrainingTypeColorViewSet(viewsets.ViewSet):
     @staticmethod
     def retrieve(request, pk):
         """Получить связь AthleteTrainingTypeColor для конкретного пользователя"""
+        relation = (
+            AthleteTrainingTypeColor.objects.filter(athlete=request.user, pk=pk)
+            .select_related('color', 'training_type')
+            .first()
+        )
+        if not relation:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        response_serializer = AthleteTrainingTypeColorResponseSerializer(instance=relation)
+        return Response(response_serializer.data, status=status.HTTP_200_OK)
 
     @staticmethod
     def create(request):
         """Создать связь AthleteTrainingTypeColor"""
 
     @staticmethod
-    def partial_update(request, pk):
+    def update(request, pk):
         """Частично обновить связь AthleteTrainingTypeColor"""
 
     @staticmethod
