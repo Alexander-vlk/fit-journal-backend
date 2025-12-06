@@ -176,7 +176,7 @@ class ColorResponseSerializer(serializers.ModelSerializer):
 class AthleteTrainingTypeColorResponseSerializer(serializers.Serializer):
     """Сериализатор ответа для AthleteTrainingTypeColor"""
 
-    id = serializers.IntegerField(help_text='ID записи', min_length=1)
+    id = serializers.IntegerField(help_text='ID записи', min_value=1)
     background_color = serializers.CharField(help_text='Цвет фона', max_length=30)
     text_color = serializers.CharField(help_text='Цвет текста', max_length=30)
     training_type = serializers.CharField(help_text='Тип тренировки', max_length=40)
