@@ -36,7 +36,7 @@ class ExerciseViewSet(
     permission_classes: list = []
     authentication_classes: list = []
     lookup_field = 'translit'
-    queryset = Exercise.objects.all()
+    queryset = Exercise.objects.filter(available_for_user=True)
     serializer_class = ExerciseResponseSerializer
 
 
