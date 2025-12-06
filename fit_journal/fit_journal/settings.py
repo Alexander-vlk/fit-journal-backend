@@ -1,3 +1,5 @@
+import datetime
+
 import environ
 from pathlib import Path
 
@@ -123,6 +125,8 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_COOKIE_HTTP_ONLY': True,
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(hours=6),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(weeks=4),
 }
 
 LANGUAGE_CODE = env('LANGUAGE_CODE', default='ru')
