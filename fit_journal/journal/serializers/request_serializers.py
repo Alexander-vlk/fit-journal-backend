@@ -36,6 +36,8 @@ class ExerciseRequestSerializer(serializers.ModelSerializer):
                     'prised_so_shtangoj',
                 ],
                 'date': '2025-10-10',
+                'training_type': 'Грудь-трицепс',
+                'color': 'Синий',
             },
         ),
     ],
@@ -52,6 +54,8 @@ class TrainingRequestSerializer(serializers.Serializer):
         help_text='Дата проведения тренировки',
         format='%Y-%m-%d',
     )
+    training_type = serializers.CharField(help_text='Тип тренировки')
+    color = serializers.CharField(help_text='Цвет')
 
 
 @extend_schema_serializer(
