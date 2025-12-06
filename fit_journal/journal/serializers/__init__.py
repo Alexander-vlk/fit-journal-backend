@@ -3,6 +3,7 @@ from .request_serializers import (
     TrainingRequestSerializer,
     ExerciseSetRequestSerializer,
     ExerciseSetIdRequestSerializer,
+    AthleteTrainingTypeColorRequestSerializer,
 )
 from .response_serializers import (
     ExerciseResponseSerializer,
@@ -13,6 +14,7 @@ from .response_serializers import (
 )
 
 __all__ = [
+    'AthleteTrainingTypeColorRequestSerializer',
     'AthleteTrainingTypeColorResponseSerializer',
     'ColorResponseSerializer',
     'ExerciseRequestSerializer',

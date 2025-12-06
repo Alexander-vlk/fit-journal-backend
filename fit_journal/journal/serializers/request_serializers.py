@@ -1,7 +1,9 @@
+from io import klass
+
 from drf_spectacular.utils import extend_schema_serializer, OpenApiExample
 from rest_framework import serializers
 
-from journal.models import Exercise, ExerciseSet, Training
+from journal.models import Exercise, ExerciseSet, Training, AthleteTrainingTypeColor
 
 
 @extend_schema_serializer(
@@ -22,6 +24,29 @@ class ExerciseRequestSerializer(serializers.ModelSerializer):
         model = Exercise
         fields = [
             'name',
+        ]
+
+
+@extend_schema_serializer(
+    many=False,
+    examples=[
+        OpenApiExample(
+            'Стандартный запрос',
+            value={
+                'training_type': 1,
+                'color': 1,
+            },
+        ),
+    ],
+)
+class AthleteTrainingTypeColorRequestSerializer(serializers.ModelSerializer):
+    """Сериализатор модели AthleteTrainingTypeColor"""
+
+    class Meta:
+        model = AthleteTrainingTypeColor
+        fields = [
+            'training_type',
+            'color',
         ]
 
 
