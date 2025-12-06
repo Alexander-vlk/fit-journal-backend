@@ -7,6 +7,7 @@ from journal.views import (
     ExerciseSetViewSet,
     GetColorsList,
     AthleteTrainingTypeColorViewSet,
+    CompareTraining,
 )
 
 journal_router = SimpleRouter()
@@ -21,5 +22,6 @@ journal_router.register(
 urlpatterns = [
     path('', include(journal_router.urls)),
     path('training/', TrainingCreate.as_view(), name='training_create'),
+    path('training/compare/', CompareTraining.as_view(), name='training_compare'),
     path('color/', GetColorsList.as_view(), name='get_colors_list'),
 ]

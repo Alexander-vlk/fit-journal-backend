@@ -1,4 +1,5 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
 from rest_framework import status, viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -282,3 +283,47 @@ class ExerciseSetViewSet(viewsets.ViewSet):
             ExerciseSet, id=request_serializer.validated_data['id']
         ).delete()
         return Response(status=status.HTTP_200_OK)
+
+
+@extend_schema_view(
+    get=extend_schema(
+        tags=[APISchemaTags.JOURNAL],
+        operation_id='Получить данные для сравнения последнего упражнения',
+        summary='Получить данные для сравнения последнего упражнения',
+        responses={
+            **DefaultAPIResponses.RESPONSES,
+            status.HTTP_200_OK: TrainingResponseSerializer,
+        },
+        parameters=[
+            OpenApiParameter(
+                name='training_type_id',
+                description='ID типа тренировки',
+                required=True,
+                type=OpenApiTypes.INT,
+                location=OpenApiParameter.QUERY,
+            ),
+        ],
+    ),
+)
+class CompareTraining(APIView):
+    """Получить данные для сравнения упражнений"""
+
+    permission_classes: list = [IsAuthenticated]
+    authentication_classes: list = [JWTAuthentication]
+
+    @staticmethod
+    def get(request):
+        """GET-запрос"""
+        training_type_id = request.query_params.get('training_type_id')
+        if not training_type_id:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        last_training = Training.objects.filter(
+            athlete=request.user,
+            athlete_training_type_id=training_type_id,
+        ).last()
+        if not last_training:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        response_serializer = TrainingResponseSerializer(instance=last_training)
+        return Response(response_serializer.data, status=status.HTTP_200_OK)
