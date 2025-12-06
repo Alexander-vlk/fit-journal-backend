@@ -1,6 +1,5 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from rest_framework import status, viewsets, generics, mixins
-from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework import status, viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -8,9 +7,14 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from auth_service.permissions import HasRefreshToken
-from journal.models import Training, Exercise, ExerciseSet, AthleteTrainingTypeColor
-from journal.serializers import TrainingRequestSerializer, TrainingResponseSerializer, ExerciseSetRequestSerializer, \
-    ExerciseSetResponseSerializer, ExerciseSetIdRequestSerializer, AthleteTrainingTypeColorResponseSerializer
+from journal.models import Training, Exercise, ExerciseSet, AthleteTrainingTypeColor, TrainingType, Color
+from journal.serializers import (
+    TrainingRequestSerializer,
+    TrainingResponseSerializer,
+    ExerciseSetRequestSerializer,
+    ExerciseSetIdRequestSerializer,
+    AthleteTrainingTypeColorResponseSerializer,
+)
 from utils.constants import DefaultAPIResponses, APISchemaTags
 
 
@@ -38,11 +42,19 @@ class TrainingCreate(APIView):
         request_serializer = TrainingRequestSerializer(data=request.data)
         request_serializer.is_valid(raise_exception=True)
 
+        new_athlete_training_type_color = AthleteTrainingTypeColor.objects.create(
+            athlete=request.user,
+            training_type=get_object_or_404(TrainingType, name=request_serializer.validated_data['training_type']),
+            color=get_object_or_404(Color, name=request_serializer.validated_data['color']),
+        )
         new_training = Training.objects.create(
             athlete=request.user,
             date=request_serializer.validated_data['date'],
+            athlete_training_type=new_athlete_training_type_color,
         )
-        exercises_in_training = Exercise.objects.filter(translit__in=request_serializer.validated_data['exercises_translit'])
+        exercises_in_training = Exercise.objects.filter(
+            translit__in=request_serializer.validated_data['exercises_translit'],
+        )
         for exercise in exercises_in_training:
             new_training.exercises.add(exercise)
 
