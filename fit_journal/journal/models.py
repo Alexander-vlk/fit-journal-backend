@@ -11,6 +11,12 @@ from utils.mixins import AutoDateMixin
 class Color(AutoDateMixin):
     """Цвет"""
 
+    name = models.CharField(
+        verbose_name='Название цвета',
+        max_length=30,
+        default='',
+        blank=True,
+    )
     background_color = models.CharField(
         verbose_name='Цвет фона',
         help_text='TailwindCSS-стиль',
@@ -31,6 +37,13 @@ class Color(AutoDateMixin):
 
     def __str__(self):
         return f'{self.background_color} {self.text_color}'
+
+    def save(self, *args, **kwargs):
+        """Расширение метода save"""
+        if not self.name:
+            color_name_from_bg_color = re.match(r'\w+-(\w+)-\d+', self.background_color)
+            self.name = color_name_from_bg_color.group(1) if color_name_from_bg_color else ''
+        super().save(*args, **kwargs)
 
 
 class Exercise(AutoDateMixin):
