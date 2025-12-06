@@ -8,7 +8,10 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from auth_service.permissions import HasRefreshToken
-from auth_service.serializers import ChangePasswordRequestSerializer, AthleteRequestSerializer
+from auth_service.serializers import (
+    ChangePasswordRequestSerializer,
+    AthleteRequestSerializer,
+)
 from utils.constants import APISchemaTags, DefaultAPIResponses
 
 

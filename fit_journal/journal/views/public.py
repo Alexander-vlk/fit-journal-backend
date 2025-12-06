@@ -28,7 +28,9 @@ from utils.constants import DefaultAPIResponses, APISchemaTags
         },
     ),
 )
-class ExerciseViewSet(generics.ListAPIView, generics.RetrieveAPIView, viewsets.GenericViewSet):
+class ExerciseViewSet(
+    generics.ListAPIView, generics.RetrieveAPIView, viewsets.GenericViewSet
+):
     """Получить данные из справочника упражнений"""
 
     permission_classes: list = []

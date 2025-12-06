@@ -1,7 +1,14 @@
 from drf_spectacular.utils import extend_schema_serializer, OpenApiExample
 from rest_framework import serializers
 
-from journal.models import Exercise, Training, ExerciseSet, Color, TrainingType, AthleteTrainingTypeColor
+from journal.models import (
+    Exercise,
+    Training,
+    ExerciseSet,
+    Color,
+    TrainingType,
+    AthleteTrainingTypeColor,
+)
 
 
 @extend_schema_serializer(
@@ -198,7 +205,9 @@ class AthleteTrainingTypeColorResponseSerializer(serializers.ModelSerializer):
 class TrainingResponseSerializer(serializers.ModelSerializer):
     """Сериализатор ответа для тренировки"""
 
-    exercises = ExerciseResponseSerializer(help_text='Список упражнений в тренировке', many=True, read_only=True)
+    exercises = ExerciseResponseSerializer(
+        help_text='Список упражнений в тренировке', many=True, read_only=True
+    )
     athlete_training_type = AthleteTrainingTypeColorResponseSerializer(
         help_text='Связь Спортсмен - Тип тренировки - Цвет',
         read_only=True,

@@ -7,13 +7,21 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from auth_service.permissions import HasRefreshToken
-from journal.models import Training, Exercise, ExerciseSet, AthleteTrainingTypeColor, TrainingType, Color
+from journal.models import (
+    Training,
+    Exercise,
+    ExerciseSet,
+    AthleteTrainingTypeColor,
+    TrainingType,
+    Color,
+)
 from journal.serializers import (
     TrainingRequestSerializer,
     TrainingResponseSerializer,
     ExerciseSetRequestSerializer,
     ExerciseSetIdRequestSerializer,
     AthleteTrainingTypeColorResponseSerializer,
+    AthleteTrainingTypeColorRequestSerializer,
 )
 from utils.constants import DefaultAPIResponses, APISchemaTags
 
@@ -44,8 +52,12 @@ class TrainingCreate(APIView):
 
         new_athlete_training_type_color = AthleteTrainingTypeColor.objects.create(
             athlete=request.user,
-            training_type=get_object_or_404(TrainingType, name=request_serializer.validated_data['training_type']),
-            color=get_object_or_404(Color, name=request_serializer.validated_data['color']),
+            training_type=get_object_or_404(
+                TrainingType, name=request_serializer.validated_data['training_type']
+            ),
+            color=get_object_or_404(
+                Color, name=request_serializer.validated_data['color']
+            ),
         )
         new_training = Training.objects.create(
             athlete=request.user,
@@ -67,26 +79,48 @@ class TrainingCreate(APIView):
         tags=[APISchemaTags.JOURNAL],
         summary='Получить список связей Атлет - Тип тренировки - Цвет',
         operation_id='Получить список связей Атлет - Тип тренировки - Цвет',
+        responses={
+            **DefaultAPIResponses.RESPONSES,
+            status.HTTP_200_OK: AthleteTrainingTypeColorResponseSerializer,
+        },
     ),
     retrieve=extend_schema(
         tags=[APISchemaTags.JOURNAL],
         summary='Получить связь Атлет - Тип тренировки - Цвет',
         operation_id='Получить связь Атлет - Тип тренировки - Цвет',
+        responses={
+            **DefaultAPIResponses.RESPONSES,
+            status.HTTP_200_OK: AthleteTrainingTypeColorResponseSerializer,
+        },
     ),
     create=extend_schema(
         tags=[APISchemaTags.JOURNAL],
         summary='Создать связь Атлет - Тип тренировки - Цвет',
         operation_id='Создать связь Атлет - Тип тренировки - Цвет',
+        request=AthleteTrainingTypeColorRequestSerializer,
+        responses={
+            **DefaultAPIResponses.RESPONSES,
+            status.HTTP_201_CREATED: AthleteTrainingTypeColorResponseSerializer,
+        },
     ),
     update=extend_schema(
         tags=[APISchemaTags.JOURNAL],
         summary='Обновить связь Атлет - Тип тренировки - Цвет',
         operation_id='Обновить связь Атлет - Тип тренировки - Цвет',
+        request=AthleteTrainingTypeColorRequestSerializer,
+        responses={
+            **DefaultAPIResponses.RESPONSES,
+            status.HTTP_201_CREATED: AthleteTrainingTypeColorResponseSerializer,
+        },
     ),
     destroy=extend_schema(
         tags=[APISchemaTags.JOURNAL],
         summary='Удалить связь Атлет - Тип тренировки - Цвет',
         operation_id='Удалить связь Атлет - Тип тренировки - Цвет',
+        responses={
+            **DefaultAPIResponses.RESPONSES,
+            status.HTTP_200_OK: {},
+        },
     ),
 )
 class AthleteTrainingTypeColorViewSet(viewsets.ViewSet):
@@ -98,11 +132,12 @@ class AthleteTrainingTypeColorViewSet(viewsets.ViewSet):
     @staticmethod
     def list(request):
         """Получить список связей AthleteTrainingTypeColor для конкретного пользователя"""
-        relations = (
-            AthleteTrainingTypeColor.objects.filter(athlete=request.user)
-            .select_related('color', 'training_type')
+        relations = AthleteTrainingTypeColor.objects.filter(
+            athlete=request.user
+        ).select_related('color', 'training_type')
+        response_serializer = AthleteTrainingTypeColorResponseSerializer(
+            instance=relations, many=True
         )
-        response_serializer = AthleteTrainingTypeColorResponseSerializer(instance=relations, many=True)
         return Response(response_serializer.data, status=status.HTTP_200_OK)
 
     @staticmethod
@@ -116,20 +151,55 @@ class AthleteTrainingTypeColorViewSet(viewsets.ViewSet):
         if not relation:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        response_serializer = AthleteTrainingTypeColorResponseSerializer(instance=relation)
+        response_serializer = AthleteTrainingTypeColorResponseSerializer(
+            instance=relation
+        )
         return Response(response_serializer.data, status=status.HTTP_200_OK)
 
     @staticmethod
     def create(request):
         """Создать связь AthleteTrainingTypeColor"""
+        request_serializer = AthleteTrainingTypeColorRequestSerializer(
+            data=request.data
+        )
+        request_serializer.is_valid(raise_exception=True)
+        athlete_trainingtype_color = AthleteTrainingTypeColor.objects.create(
+            athlete=request.user,
+            training_type=TrainingType.objects.get(
+                pk=request_serializer.validated_data['training_type'].pk
+            ),
+            color=Color.objects.get(pk=request_serializer.validated_data['color'].pk),
+        )
+        response_serializer = AthleteTrainingTypeColorResponseSerializer(
+            instance=athlete_trainingtype_color
+        )
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
     @staticmethod
     def update(request, pk):
         """Частично обновить связь AthleteTrainingTypeColor"""
+        request_serializer = AthleteTrainingTypeColorRequestSerializer(
+            data=request.data
+        )
+        request_serializer.is_valid(raise_exception=True)
+        athlete_trainingtype_color = AthleteTrainingTypeColor.objects.filter(
+            athlete=request.user, pk=pk
+        ).update(
+            training_type=TrainingType.objects.get(
+                pk=request_serializer.validated_data['training_type'].pk
+            ),
+            color=Color.objects.get(pk=request_serializer.validated_data['color'].pk),
+        )
+        response_serializer = AthleteTrainingTypeColorResponseSerializer(
+            instance=athlete_trainingtype_color
+        )
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
     @staticmethod
     def destroy(request, pk):
         """Удалить связь AthleteTrainingTypeColor"""
+        AthleteTrainingTypeColor.objects.filter(athlete=request.user, pk=pk).delete()
+        return status.HTTP_200_OK
 
 
 @extend_schema_view(
@@ -208,5 +278,7 @@ class ExerciseSetViewSet(viewsets.ViewSet):
             },
         )
         request_serializer.is_valid(raise_exception=True)
-        get_object_or_404(ExerciseSet, id=request_serializer.validated_data['id']).delete()
+        get_object_or_404(
+            ExerciseSet, id=request_serializer.validated_data['id']
+        ).delete()
         return Response(status=status.HTTP_200_OK)

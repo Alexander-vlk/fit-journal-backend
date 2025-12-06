@@ -3,12 +3,18 @@ from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import (
+    TokenRefreshSerializer,
+    TokenObtainPairSerializer,
+)
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from auth_service.models import Athlete
 from auth_service.permissions import HasNoRefreshToken, HasRefreshToken
-from auth_service.serializers import AccessTokenResponseSerializer, RegisterAthleteRequestSerializer
+from auth_service.serializers import (
+    AccessTokenResponseSerializer,
+    RegisterAthleteRequestSerializer,
+)
 from auth_service.services import get_authenticated_response
 from utils.constants import APISchemaTags, DefaultAPIResponses
 
@@ -138,7 +144,7 @@ class CustomTokenRefreshView(TokenRefreshView):
         """POST-запрос"""
         refresh_token = request.COOKIES.get('refresh_token')
         request_serializer = self.serializer_class(
-           data={
+            data={
                 'refresh': refresh_token,
             },
         )

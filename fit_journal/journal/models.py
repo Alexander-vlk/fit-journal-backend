@@ -42,7 +42,9 @@ class Color(AutoDateMixin):
         """Расширение метода save"""
         if not self.name:
             color_name_from_bg_color = re.match(r'\w+-(\w+)-\d+', self.background_color)
-            self.name = color_name_from_bg_color.group(1) if color_name_from_bg_color else ''
+            self.name = (
+                color_name_from_bg_color.group(1) if color_name_from_bg_color else ''
+            )
         super().save(*args, **kwargs)
 
 
@@ -56,7 +58,9 @@ class Exercise(AutoDateMixin):
         unique=True,
         help_text='Заполняется автоматически на основе названия',
     )
-    available_for_user = models.BooleanField(verbose_name='Доступно для выбора пользователю', default=False)
+    available_for_user = models.BooleanField(
+        verbose_name='Доступно для выбора пользователю', default=False
+    )
 
     class Meta:
         verbose_name = 'Упражнение'
@@ -110,7 +114,12 @@ class AthleteTrainingTypeColor(AutoDateMixin):
 class Training(AutoDateMixin):
     """Тренировка"""
 
-    athlete = models.ForeignKey(Athlete, verbose_name='Спортсмен', on_delete=models.PROTECT, related_name='trainings')
+    athlete = models.ForeignKey(
+        Athlete,
+        verbose_name='Спортсмен',
+        on_delete=models.PROTECT,
+        related_name='trainings',
+    )
     athlete_training_type = models.ForeignKey(
         AthleteTrainingTypeColor,
         on_delete=models.PROTECT,
@@ -118,7 +127,9 @@ class Training(AutoDateMixin):
         null=True,
         blank=True,
     )
-    exercises = models.ManyToManyField(Exercise, verbose_name='Упражнения', related_name='trainings')
+    exercises = models.ManyToManyField(
+        Exercise, verbose_name='Упражнения', related_name='trainings'
+    )
     date = models.DateField(verbose_name='Дата проведения', db_index=True)
 
     class Meta:
@@ -148,7 +159,9 @@ class ExerciseSet(AutoDateMixin):
     )
     repetition = models.PositiveSmallIntegerField(verbose_name='Число повторений')
     weight = models.PositiveSmallIntegerField(verbose_name='Вес')
-    comment = models.CharField(verbose_name='Комментарий', max_length=200, blank=True, default='')
+    comment = models.CharField(
+        verbose_name='Комментарий', max_length=200, blank=True, default=''
+    )
 
     class Meta:
         verbose_name = 'Подход'

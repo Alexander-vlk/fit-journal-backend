@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from journal.models import Exercise, ExerciseSet, Training, Color, TrainingType, AthleteTrainingTypeColor
+from journal.models import (
+    Exercise,
+    ExerciseSet,
+    Training,
+    Color,
+    TrainingType,
+    AthleteTrainingTypeColor,
+)
 
 
 @admin.register(Color)
@@ -38,7 +45,7 @@ class AthleteTrainingTypeColorAdmin(admin.ModelAdmin):
     """Админ для AthleteTrainingTypeColor"""
 
     list_display = ['id', 'athlete', 'training_type', 'color']
-    raw_id_fields =['athlete', 'training_type', 'color']
+    raw_id_fields = ['athlete', 'training_type', 'color']
 
 
 @admin.register(Training)

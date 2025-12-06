@@ -10,4 +10,3 @@ class JournalConfig(AppConfig):
 
     def ready(self):
         """Подготовка сигналов"""
-        import journal.signals

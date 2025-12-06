@@ -11,4 +11,6 @@ def handle_exercises_changes(sender, instance, action, **kwargs):
         return
 
     exercise_ids_in_training = instance.exercises.values_list('id', flat=True)
-    ExerciseSet.objects.filter(training=instance).exclude(exercise_id__in=exercise_ids_in_training).delete()
+    ExerciseSet.objects.filter(training=instance).exclude(
+        exercise_id__in=exercise_ids_in_training
+    ).delete()

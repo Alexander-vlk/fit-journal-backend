@@ -1,7 +1,14 @@
 from drf_spectacular.utils import extend_schema_serializer, OpenApiExample
 from rest_framework import serializers
 
-from journal.models import Exercise, ExerciseSet, Training, AthleteTrainingTypeColor
+from journal.models import (
+    Exercise,
+    ExerciseSet,
+    Training,
+    AthleteTrainingTypeColor,
+    TrainingType,
+    Color,
+)
 
 
 @extend_schema_serializer(
@@ -46,6 +53,15 @@ class AthleteTrainingTypeColorRequestSerializer(serializers.ModelSerializer):
             'training_type',
             'color',
         ]
+
+    def validate(self, attrs):
+        """Валидировать данные"""
+        if not TrainingType.objects.filter(pk=attrs['training_type'].pk).exists():
+            raise serializers.ValidationError('Такого типа тренировки не существует')
+        if not Color.objects.filter(pk=attrs['color'].pk).exists():
+            raise serializers.ValidationError('Такого цвета не существует')
+
+        return attrs
 
 
 @extend_schema_serializer(
@@ -99,8 +115,15 @@ class ExerciseSetIdRequestSerializer(serializers.Serializer):
 
     def validate_exercise_set_id(self, exercise_set_id):
         """Проверить, что удаляется подход, привязанный к тренировке пользователя"""
-        if ExerciseSet.objects.select_related('training').get(id=exercise_set_id).training.user != self.context['user']:
-            raise serializers.ValidationError('Нельзя удалить подход, привязанный к чужой тренировке')
+        if (
+            ExerciseSet.objects.select_related('training')
+            .get(id=exercise_set_id)
+            .training.user
+            != self.context['user']
+        ):
+            raise serializers.ValidationError(
+                'Нельзя удалить подход, привязанный к чужой тренировке'
+            )
 
         return exercise_set_id
 
@@ -135,7 +158,11 @@ class ExerciseSetRequestSerializer(serializers.ModelSerializer):
 
     def validate_training_id(self, training: int) -> int:
         """Проверить, что тренировка принадлежит пользователю, отправившему запрос"""
-        if training not in Training.objects.filter(user=self.context['user']).values_list('id', flat=True):
-            raise serializers.ValidationError('Нельзя создать тренировку другому пользователю')
+        if training not in Training.objects.filter(
+            user=self.context['user']
+        ).values_list('id', flat=True):
+            raise serializers.ValidationError(
+                'Нельзя создать тренировку другому пользователю'
+            )
 
         return training

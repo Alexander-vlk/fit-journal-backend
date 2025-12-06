@@ -1,8 +1,13 @@
 from django.urls import path, include
 from rest_framework.routers import SimpleRouter
 
-from journal.views import ExerciseViewSet, TrainingCreate, ExerciseSetViewSet, GetColorsList, \
-    AthleteTrainingTypeColorViewSet
+from journal.views import (
+    ExerciseViewSet,
+    TrainingCreate,
+    ExerciseSetViewSet,
+    GetColorsList,
+    AthleteTrainingTypeColorViewSet,
+)
 
 journal_router = SimpleRouter()
 journal_router.register('exercises', ExerciseViewSet)

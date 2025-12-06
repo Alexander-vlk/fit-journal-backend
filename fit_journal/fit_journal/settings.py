@@ -14,7 +14,6 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default='localhost')
 INSTALLED_APPS = [
     # local app
     'auth_service.apps.AuthServiceConfig',
-
     # default django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -22,12 +21,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     # third-party-apps
     'drf_spectacular',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-
     # local app
     'journal.apps.JournalConfig',
 ]

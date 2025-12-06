@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 
 from auth_service.models import Athlete
 
+
 @admin.register(Athlete)
 class AthleteAdmin(UserAdmin):
     """Админ для модели Athlete"""
@@ -19,7 +20,7 @@ class AthleteAdmin(UserAdmin):
                     'phone',
                     'email',
                 ),
-             },
+            },
         ),
         (
             'Permissions',

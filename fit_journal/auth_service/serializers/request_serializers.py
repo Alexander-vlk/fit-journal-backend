@@ -1,5 +1,7 @@
 from cfgv import ValidationError
-from django.contrib.auth.password_validation import validate_password as django_validate_password
+from django.contrib.auth.password_validation import (
+    validate_password as django_validate_password,
+)
 from drf_spectacular.utils import extend_schema_serializer, OpenApiExample
 from rest_framework import serializers
 
@@ -59,7 +61,7 @@ class ChangePasswordRequestSerializer(serializers.Serializer):
                 'last_name': 'last_name',
                 'first_name': 'first_name',
                 'second_name': 'second_name',
-                'phone': 'phone'
+                'phone': 'phone',
             },
         ),
     ],
@@ -102,10 +104,16 @@ class RegisterAthleteRequestSerializer(serializers.Serializer):
 
     username = serializers.CharField(help_text='Имя пользователя', max_length=150)
     email = serializers.EmailField(help_text='Электронная почта', allow_blank=True)
-    last_name = serializers.CharField(help_text='Фамилия', allow_blank=True, max_length=60)
+    last_name = serializers.CharField(
+        help_text='Фамилия', allow_blank=True, max_length=60
+    )
     first_name = serializers.CharField(help_text='Имя', allow_blank=True, max_length=60)
-    second_name = serializers.CharField(help_text='Отчество', allow_blank=True, max_length=60)
-    phone = serializers.CharField(help_text='Номер телефона', allow_blank=True, max_length=13)
+    second_name = serializers.CharField(
+        help_text='Отчество', allow_blank=True, max_length=60
+    )
+    phone = serializers.CharField(
+        help_text='Номер телефона', allow_blank=True, max_length=13
+    )
 
     password = serializers.CharField(help_text='Пароль', max_length=128)
     password2 = serializers.CharField(help_text='Пароль (еще раз)', max_length=128)
