@@ -23,6 +23,7 @@ class ExerciseAdmin(admin.ModelAdmin):
 
     list_display = ['name', 'translit', 'available_for_user']
     readonly_fields = ['translit']
+    list_filter = ['available_for_user']
 
 
 @admin.register(ExerciseSet)
@@ -31,6 +32,7 @@ class ExerciseSetAdmin(admin.ModelAdmin):
 
     list_display = ['exercise', 'training', 'repetition', 'weight']
     raw_id_fields = ['exercise', 'training']
+    list_filter = ['training']
 
 
 @admin.register(TrainingType)
@@ -46,6 +48,7 @@ class AthleteTrainingTypeColorAdmin(admin.ModelAdmin):
 
     list_display = ['id', 'athlete', 'training_type', 'color']
     raw_id_fields = ['athlete', 'training_type', 'color']
+    list_filter = ['athlete', 'training_type', 'color']
 
 
 @admin.register(Training)
@@ -54,3 +57,4 @@ class TrainingAdmin(admin.ModelAdmin):
 
     list_display = ['athlete', 'date']
     raw_id_fields = ['athlete']
+    list_filter = ['athlete']
